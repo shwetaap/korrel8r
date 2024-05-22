@@ -4,7 +4,7 @@
 package browser
 
 import (
-	"context"
+	//"context"
 	"embed"
 	"errors"
 	"html/template"
@@ -16,9 +16,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/korrel8r/korrel8r/internal/pkg/logging"
 	"github.com/korrel8r/korrel8r/internal/pkg/must"
-	"github.com/korrel8r/korrel8r/pkg/domains/k8s"
+	//"github.com/korrel8r/korrel8r/pkg/domains/k8s"
 	"github.com/korrel8r/korrel8r/pkg/engine"
-	"github.com/korrel8r/korrel8r/pkg/openshift"
+	//"github.com/korrel8r/korrel8r/pkg/openshift"
 )
 
 var (
@@ -33,7 +33,7 @@ var (
 type Browser struct {
 	version    string
 	engine     *engine.Engine
-	console    *openshift.Console
+	//console    *openshift.Console
 	router     *gin.Engine
 	images     http.FileSystem
 	dir, files string
@@ -55,19 +55,19 @@ func New(e *engine.Engine, router *gin.Engine, version string) (*Browser, error)
 	if err != nil {
 		return nil, err
 	}
-	cfg, err := k8s.GetConfig()
-	if err != nil {
-		return nil, err
-	}
-	kc, err := k8s.NewClient(cfg)
-	if err != nil {
-		return nil, err
-	}
-	consoleURL, err := openshift.ConsoleURL(context.Background(), kc)
-	if err != nil {
-		return nil, err
-	}
-	b.console = openshift.NewConsole(consoleURL, kc)
+	//cfg, err := k8s.GetConfig()
+	//if err != nil {
+	//	return nil, err
+	//}
+	//kc, err := k8s.NewClient(cfg)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//consoleURL, err := openshift.ConsoleURL(context.Background(), kc)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//b.console = openshift.NewConsole(consoleURL, kc)
 	c := &correlate{browser: b}
 
 	tmpl := template.Must(template.New("").Funcs(b.engine.TemplateFuncs()).ParseFS(templates, "templates/*.tmpl"))

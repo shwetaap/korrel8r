@@ -68,7 +68,7 @@ func (c *correlate) reset(url *url.URL) {
 		browser:     app,
 	}
 	c.Goals = []string{"log", "k8s:Event", "metric:metric"}
-	c.ConsoleURL = c.browser.console.BaseURL
+	//c.ConsoleURL = c.browser.console.BaseURL
 	c.Graph = c.browser.engine.Graph()
 	// Defaults
 	if c.Goal == "" {
@@ -158,13 +158,14 @@ func (c *correlate) update(req *http.Request) {
 }
 
 func (c *correlate) updateStart() (err error) {
-	prefix, _, ok := strings.Cut(c.Start, ":") // Guess if its a korrel8r query or a URL
+	//prefix, _, ok := strings.Cut(c.Start, ":") // Guess if its a korrel8r query or a URL
+	_, _, ok := strings.Cut(c.Start, ":") // Guess if its a korrel8r query or a URL
 	switch {
-	case ok && (prefix == "http" || prefix == "https"): // Looks like URL
-		var u *url.URL
-		if u, err = url.Parse(c.Start); err == nil {
-			c.StartQuery, err = c.browser.console.QueryFromURL(u)
-		}
+	//case ok && (prefix == "http" || prefix == "https"): // Looks like URL
+		//var u *url.URL
+		//if u, err = url.Parse(c.Start); err == nil {
+		//	c.StartQuery, err = c.browser.console.QueryFromURL(u)
+		//}
 	case ok: // Try as a query
 		c.StartQuery, err = c.browser.engine.Query(c.Start)
 	case c.Start == "":
@@ -221,12 +222,13 @@ func (c *correlate) queryURLAttrs(a graph.Attrs, qs graph.Queries, d korrel8r.Do
 		}
 	}
 	if maxS != "" {
-		q, err := d.Query(maxS)
-		if err != nil {
-			a["URL"] = c.checkURL(&url.URL{}, err).String()
-		} else {
-			a["URL"] = c.checkURL(c.browser.console.URLFromQuery(q)).String()
-		}
+		//q, err := d.Query(maxS)
+		_, err := d.Query(maxS)
+//		if err != nil {
+		a["URL"] = c.checkURL(&url.URL{}, err).String()
+//		} else {
+//			a["URL"] = c.checkURL(c.browser.console.URLFromQuery(q)).String()
+//		}
 		a["target"] = "_blank"
 	}
 }
